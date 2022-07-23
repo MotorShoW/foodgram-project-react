@@ -7,3 +7,4 @@ djoser==2.1.0
 python-dotenv==0.20.0
 django-filter==22.1
 djangorestframework==3.13.1
+pillow-9.2.0
