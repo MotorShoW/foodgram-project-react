@@ -113,7 +113,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     image = Base64ImageField()
     is_in_shopping_cart = serializers.BooleanField(read_only=True)
-    is_favorited = serializers.BooleanField(read_onyl=True)
+    is_favorited = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Recipe
@@ -121,7 +121,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, recipe, ingredients):
         for ingredient in ingredients:
-            IngredientAmount.objects.create(
+            IngredientAmount.objects.bulk_create(
                 recipe=recipe,
                 amount=ingredient.get('amount'),
                 ingredient_id=ingredient.get('id')
@@ -186,7 +186,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='following.email')
     first_name = serializers.CharField(source='following.first_name')
     last_name = serializers.CharField(source='following.last_name')
-    recipes = serializers.SerializerMethodField()
+    recipes = RecipeSubscriptionSerializer(many=True)
     is_subscribed = serializers.BooleanField(read_only=True)
     recipes_count = serializers.IntegerField(read_only=True)
 

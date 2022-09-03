@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.core import validators
 
 User = get_user_model()
 
@@ -81,13 +82,20 @@ class Recipe(models.Model):
     text = models.TextField(
         'Текст рецепта'
     )
-    cooking_time = models.IntegerField(
-        'Время приготовления'
+    cooking_time = models.PositiveIntegerField(
+        'Время приготовления',
+        validators=[validators.MinValueValidator(
+            1, message='Время приготовления должно быть больше минуты'),
+        ])
+    pub_date = models.DateTimeField(
+        'Дата публикации',
+        auto_now_add=True
     )
 
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
+        ordering = ('-pub_date', )
 
     def __str__(self):
         return f'{self.name}, {self.author.username}'
