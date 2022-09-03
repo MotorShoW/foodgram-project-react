@@ -195,14 +195,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'first_name', 'last_name',
                   'recipes', 'is_subscribed', 'recipes_count', 'recipes')
 
-    def get_recipes(self, obj):
-        request = self.context.get('request')
-        limit = request.GET.get('recipes_limit')
-        recipes = obj.author.recipes
-        if limit:
-            recipes = recipes.all()[:int(limit)]
-        return RecipeSubscriptionSerializer(recipes, many=True).data
-
 
 class TokenSerializer(serializers.Serializer):
     token = serializers.CharField(label='Токен', read_only=True)
